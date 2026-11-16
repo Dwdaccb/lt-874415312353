@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120a24">
+<meta name="robots" content="noindex">
+<title>The Leonida Tracker (unofficial fan tracker)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 rx=%273%27 fill=%27%23ff3d94%27/%3E%3C/svg%3E">
+<!-- The Leonida Tracker v1.0 by Driwzd. Unofficial fan tracker: not affiliated with Rockstar Games or Take-Two.
+     One file, no external resources, no tracking. Progress is saved only in this browser (localStorage). -->
+<style>
+  :root { --bg:#120a24; --card:#1d1236; --line:#35264f; --ink:#f6effc; --mute:#ab9fc0; --pink:#ff3d94; --orange:#ff9a3d; --sun:#ffd166; --teal:#19d3c5; }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding-bottom: 40px; }
+  button, input, select { font: inherit; color: inherit; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 14px; }
+  .notice { font-size: 12px; color: var(--mute); text-align: center; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+  header.top { position: sticky; top: 0; z-index: 5; background: rgba(18,10,36,.97); border-bottom: 1px solid var(--line); padding: 10px 0 9px; }
+  h1 { font-size: 20px; margin: 0; letter-spacing: .02em; text-transform: uppercase; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  h1 i { font-style: normal; color: var(--pink); }
+  h1 span { font-size: 15px; color: var(--sun); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bar { height: 9px; border-radius: 9px; background: #2a1c47; overflow: hidden; margin: 8px 0; }
+  .bar b { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--orange), var(--sun)); transition: width .25s; }
+  .tools { display: flex; gap: 8px; }
+  .tools input { flex: 1; min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+  .tools select { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 9px 8px; max-width: 46%; }
+  input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  details.cat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin: 12px 0; overflow: hidden; }
+  details.cat > summary { list-style: none; cursor: pointer; padding: 13px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+  details.cat > summary::-webkit-details-marker { display: none; }
+  summary .nm { font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
+  summary .ct { color: var(--sun); font-variant-numeric: tabular-nums; font-size: 14px; }
+  summary .bar { grid-column: 1 / -1; margin: 2px 0 0; height: 5px; }
+  .about { color: var(--mute); font-size: 13.5px; padding: 0 14px 8px; margin: 0; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li.it { display: grid; grid-template-columns: 30px 1fr auto; gap: 2px 8px; align-items: start; padding: 10px 14px; border-top: 1px solid var(--line); }
+  li.it input[type=checkbox] { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--pink); }
+  li.it label { cursor: pointer; }
+  li.it.done label { color: var(--mute); text-decoration: line-through; }
+  .tg { display: inline-block; font: 700 10px ui-monospace, Consolas, monospace; letter-spacing: .06em; padding: 2px 5px; border-radius: 4px; margin-left: 6px; vertical-align: 2px; color: #120a24; background: var(--mute); white-space: nowrap; }
+  .tg.OFFICIAL { background: var(--teal); } .tg.PREVIEW { background: #b79bff; } .tg.REPORTED { background: var(--orange); } .tg.UNCONFIRMED { background: #6f6384; color: #fff; } .tg.MINE { background: var(--sun); } .tg.TIP { background: var(--pink); color: #fff; }
+  .src { display: block; font-size: 12.5px; color: var(--mute); text-decoration: none; }
+  .ib { background: none; border: 0; color: var(--mute); padding: 2px 6px; font-size: 17px; cursor: pointer; border-radius: 6px; }
+  .note { grid-column: 2 / -1; width: 100%; background: #140c28; border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; font-size: 14px; margin-top: 5px; }
+  form.add { display: flex; gap: 8px; padding: 10px 14px 13px; border-top: 1px solid var(--line); }
+  form.add input { flex: 1; min-width: 0; background: #140c28; border: 1px dashed #5a4683; border-radius: 9px; padding: 9px 11px; }
+  .btn { background: var(--pink); color: #fff; border: 0; border-radius: 9px; padding: 9px 13px; font-weight: 800; cursor: pointer; }
+  .btn.q { background: #2a1c47; color: var(--ink); font-weight: 600; }
+  .goal { padding: 10px 14px; border-top: 1px solid var(--line); }
+  .goal .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .goal .row b { flex: 1; min-width: 120px; }
+  .goal input { width: 104px; background: #140c28; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+  form.addgoal { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 14px 13px; border-top: 1px solid var(--line); }
+  form.addgoal input { background: #140c28; border: 1px dashed #5a4683; border-radius: 9px; padding: 9px 11px; min-width: 0; }
+  form.addgoal input[name=n] { flex: 2 1 150px; } form.addgoal input[name=t] { flex: 1 1 90px; }
+  .foot { color: var(--mute); font-size: 13px; margin-top: 22px; }
+  .foot .row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .empty { color: var(--mute); padding: 18px 4px; text-align: center; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="notice">Unofficial fan tracker &mdash; not affiliated with Rockstar Games or Take-Two. Made before launch: only sourced items are pre-filled.</div>
+<header class="top"><div class="wrap">
+  <h1><span style="color:inherit;font-size:inherit">Leonida <i>Tracker</i></span><span id="tot">0 / 0</span></h1>
+  <div class="bar"><b id="totbar"></b></div>
+  <div class="tools">
+    <input id="q" type="search" placeholder="Search" aria-label="Search items">
+    <select id="f" aria-label="Filter">
+      <option value="all">All</option><option value="todo">To do</option><option value="done">Done</option>
+      <option value="UNCONFIRMED">Unconfirmed</option><option value="MINE">Added by me</option>
+    </select>
+  </div>
+</div></header>
+
+<main class="wrap" id="main"></main>
+
+<div class="wrap foot">
+  <p><b>Your progress is saved only on this device, in this browser.</b> Clearing site data erases it, so export a backup now and then. Nothing is sent anywhere.</p>
+  <div class="row">
+    <button class="btn q" id="exp">Export backup</button>
+    <button class="btn q" id="imp">Import backup</button>
+    <button class="btn q" id="rst">Reset everything</button>
+    <input type="file" id="file" accept="application/json,.json" hidden>
+  </div>
+  <p><b>Tags.</b> OFFICIAL: Rockstar said it. PREVIEW: a journalist who saw the game reported it. REPORTED: the press reports it and names a source. UNCONFIRMED: nobody has confirmed it; find out in your own game. MINE: you added it.</p>
+  <p>The Leonida Tracker v1.0 by Driwzd, companion to The Day One Field Guide. Facts last checked November 15, 2026, before the game came out; the final game may differ. Nobody has the full list of missions, collectibles or vehicles before launch, so those lists start empty and are yours to build. Unofficial fan tracker. Not affiliated with, endorsed by or sponsored by Rockstar Games or Take-Two Interactive. All trademarks belong to their owners. No official artwork, logos, screenshots or maps. For personal use. Questions and refunds: framewrightstudio4@gmail.com</p>
+</div>
+
+<script>
+// Data: every pre-filled item comes from The Day One Field Guide v1.0 (same sources). [id, text, tag, source]
+var RB = 'Red Bull, gameplay details', GI = 'Game Informer', RS = 'rockstargames.com/VI, via Game Informer';
+var CATS = [
+ { id: 'night', name: 'Launch night', about: 'Before the game unlocks.', items: [
+  ['n1', 'Free space checked (up to 212 GB)', 'OFFICIAL', 'Rockstar, via Insider Gaming and GameRant'],
+  ['n2', 'Pre-load finished (open since November 10)', 'OFFICIAL', 'Rockstar Support, pre-load FAQ'],
+  ['n3', 'Boxed copy: code redeemed (there is no disc)', 'REPORTED', 'Engadget, Beebom, GTABoom'],
+  ['n4', 'Unlock time read on my own console store page', 'OFFICIAL', 'Midnight local time: Rockstar Support, via press'],
+  ['n5', 'Pre-order bonus bought before my store cutoff (optional)', 'REPORTED', 'Store listings, via allthings.how'],
+  ['n6', 'Console updated and restarted', 'TIP', 'Our tip'],
+  ['n7', 'Official Leonida map downloaded from Rockstar (free, from November 19)', 'OFFICIAL', 'Newswire of November 3, via Beebom, GTABoom, Gfinity'],
+  ['n8', 'Game and character names muted on social apps', 'TIP', 'Our tip'],
+  ['n9', 'Hard stop time set for tonight', 'TIP', 'Our tip'] ] },
+ { id: 'hour', name: 'First hour', about: 'The twelve steps of the Field Guide. Short on time: 1, 3 and 12.', items: [
+  ['h1', '1. Settings checked: aim, Focus button', 'REPORTED', RB + ': auto-aim off by default'],
+  ['h2', '2. Phone: all four apps opened', 'REPORTED', RB],
+  ['h3', '3. First cash in the bank', 'REPORTED', RB + ': pocket cash is lost if Wasted or Busted'],
+  ['h4', '4. Nearest Pay ’n’ Spray found', 'REPORTED', RB],
+  ['h5', '5. Partner’s first message answered', 'REPORTED', RB],
+  ['h6', '6. First race entered', 'REPORTED', RB + '; Extended Look coverage'],
+  ['h7', '7. First car scanned with Waink before stealing', 'REPORTED', RB + '; GTABase recap'],
+  ['h8', '8. Same street driven at noon and at night', 'REPORTED', RB],
+  ['h9', '9. One small crime, stars watched', 'REPORTED', RB],
+  ['h10', '10. New look (hair, clothes or mask)', 'PREVIEW', 'Edge, via GamesRadar; ' + RB],
+  ['h11', '11. Dog petted (or rejected)', 'REPORTED', RB],
+  ['h12', '12. Ten quiet minutes by the water', 'TIP', 'Our tip'] ] },
+ { id: 'act', name: 'Activities', about: 'Activities with a source before launch. Add the ones you find.', items: [
+  ['a1', 'Basketball', 'REPORTED', RB], ['a2', 'Kayaking', 'REPORTED', RB + '; also seen by Game Informer'], ['a3', 'Mini golf', 'REPORTED', RB],
+  ['a4', 'Pool', 'REPORTED', RB], ['a5', 'Diving', 'REPORTED', RB], ['a6', 'Parachuting', 'REPORTED', RB], ['a7', 'Jet ski', 'REPORTED', RB],
+  ['a8', 'Fishing', 'REPORTED', RB], ['a9', 'Hunting', 'REPORTED', RB], ['a10', 'Fighting', 'REPORTED', RB], ['a11', 'Shooting range', 'REPORTED', RB],
+  ['a12', 'Car race', 'REPORTED', RB], ['a13', 'Dirt bike race', 'REPORTED', RB], ['a14', 'Gym session', 'REPORTED', RB] ] },
+ { id: 'place', name: 'Places to visit', about: 'The six areas and the Vice City places named on Rockstar’s website. Add your own spots.', items: [
+  ['p1', 'Vice City', 'OFFICIAL', RS], ['p2', 'Vice City: Ocean Beach', 'OFFICIAL', RS], ['p3', 'Vice City: Little Cuba', 'OFFICIAL', RS],
+  ['p4', 'Vice City: the Tisha-Wocka area', 'OFFICIAL', RS], ['p5', 'Vice City: the port', 'OFFICIAL', RS],
+  ['p6', 'Leonida Keys', 'OFFICIAL', RS], ['p7', 'Grassrivers', 'OFFICIAL', RS], ['p8', 'Port Gellhorn', 'OFFICIAL', RS],
+  ['p9', 'Ambrosia', 'OFFICIAL', RS], ['p10', 'Mount Kalaga', 'OFFICIAL', RS] ] },
+ { id: 'sys', name: 'Things to try', about: 'Systems reported before launch. Tick each one when you have done it yourself.', items: [
+  ['s1', 'Refuel a car (hold R2 / RT for about ten seconds)', 'REPORTED', RB], ['s2', 'Run out of fuel once, on purpose', 'REPORTED', RB],
+  ['s3', 'Swap seats while driving', 'REPORTED', RB], ['s4', 'Use Focus in a fight', 'REPORTED', RB],
+  ['s5', 'Clear a wanted level at Pay ’n’ Spray', 'REPORTED', RB], ['s6', 'Hot-wire an old car', 'REPORTED', RB],
+  ['s7', 'Open a parked car with a lock pick', 'REPORTED', RB], ['s8', 'Register a stolen car as mine', 'REPORTED', RB + ' (read through a summary)'],
+  ['s9', 'Buy a garage', 'REPORTED', RB], ['s10', 'Unlock a key duplicator', 'REPORTED', RB + ' (read through a summary)'],
+  ['s11', 'Rob a shop and bag the till', 'REPORTED', RB], ['s12', 'Sell duffel bag loot to a fence', 'REPORTED', RB],
+  ['s13', 'Find a second fence (they buy by category)', 'REPORTED', RB], ['s14', 'Carry two handguns and two long guns', 'REPORTED', RB],
+  ['s15', 'Switch between Jason and Lucia in the open world', 'REPORTED', RB], ['s16', 'Meet up with my partner by call or text', 'REPORTED', RB],
+  ['s17', 'Spot an event on Snapmatic and go to it', 'REPORTED', RB], ['s18', 'Take a RydeMe', 'REPORTED', RB],
+  ['s19', 'Ride a bus', 'REPORTED', RB + ' (read through a summary)'], ['s20', 'Ride a train', 'REPORTED', RB + ' (read through a summary)'],
+  ['s21', 'Take a taxi', 'REPORTED', RB + ' (read through a summary)'], ['s22', 'Ride an electric scooter', 'REPORTED', RB + ' (read through a summary)'],
+  ['s23', 'See a tropical storm or hurricane', 'PREVIEW', GI] ] },
+ { id: 'cops', name: 'Police and Heat', about: 'See each state in your own game. Reported before launch.', items: [
+  ['c1', 'Seen: solid white stars (they see you)', 'REPORTED', RB], ['c2', 'Seen: flashing stars (they just lost you)', 'REPORTED', RB],
+  ['c3', 'Seen: hollow stars (reported, no description)', 'REPORTED', RB], ['c4', 'Seen: red stars (escaped, still in the search area)', 'REPORTED', RB],
+  ['c5', 'Escaped a chase without police dots on the minimap', 'REPORTED', 'GAMES.GG, GTAIntel (both rely on previews)'],
+  ['c6', 'Found a police perimeter at a shop I robbed', 'REPORTED', RB], ['c7', 'Reached six stars', 'REPORTED', RB],
+  ['c8', 'Found out what the sixth star does', 'UNCONFIRMED', 'Nobody has confirmed it'],
+  ['c9', 'Found out if Pay ’n’ Spray resets what police know about me', 'UNCONFIRMED', 'Nobody has confirmed it'] ] },
+ { id: 'wild', name: 'Wildlife', about: 'More than 170 species are reported. These eight were named before launch.', items: [
+  ['w1', 'Flamingo', 'PREVIEW', GI], ['w2', 'Manatee', 'PREVIEW', GI], ['w3', 'Pelican', 'PREVIEW', GI], ['w4', 'Alligator', 'PREVIEW', GI],
+  ['w5', 'Iguana', 'PREVIEW', GI], ['w6', 'Cane toad', 'PREVIEW', GI], ['w7', 'Cat', 'PREVIEW', GI], ['w8', 'Rhesus macaque', 'PREVIEW', GI],
+  ['w9', 'A rare or legendary animal', 'PREVIEW', GI] ] },
+ { id: 'who', name: 'Jason and Lucia', about: 'The criminal profile comes from a single source. See if it holds up.', items: [
+  ['j1', 'Jason: profile tier seen in game (write it in the note)', 'UNCONFIRMED', RB + ', single source'],
+  ['j2', 'Lucia: profile tier seen in game (write it in the note)', 'UNCONFIRMED', RB + ', single source'],
+  ['j3', 'Visible muscle from regular gym training', 'REPORTED', RB], ['j4', 'Weight gained from overeating', 'REPORTED', RB],
+  ['j5', 'Relationship improved by time together', 'REPORTED', RB] ] },
+ { id: 'cars', name: 'Garage', about: 'No vehicle list was published before launch. Add each car you keep; use the note for where you found it.', items: [] },
+ { id: 'side', name: 'Side missions', about: 'No side mission has been named by a source yet. Add them as you meet them.', items: [] },
+ { id: 'coll', name: 'Collectibles', about: 'Nobody has confirmed what the collectibles are, or if there are any. This list is yours.', items: [] },
+ { id: 'open', name: 'Open questions', about: 'What nobody knew before launch. Tick when you have the answer and write it in the note.', items: [
+  ['o1', 'How saving works', 'UNCONFIRMED', ''], ['o2', 'Difficulty options', 'UNCONFIRMED', ''], ['o3', 'How you deposit money in the bank', 'UNCONFIRMED', ''],
+  ['o4', 'Prices of garages, properties or businesses', 'UNCONFIRMED', ''], ['o5', 'How much money the story asks for, and when', 'UNCONFIRMED', RB + ': a sum is required, amount not stated'],
+  ['o6', 'Is there a 60 FPS mode?', 'UNCONFIRMED', ''], ['o7', 'How often hurricanes hit', 'UNCONFIRMED', ''], ['o8', 'The map’s size in miles or kilometers', 'UNCONFIRMED', ''] ] }
+];
+
+var KEY = 'leonida-tracker-v1', S = { done: {}, notes: {}, custom: [], goals: [], open: { night: 1, hour: 1 } }, mem = false;
+try { var raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) { mem = true; }
+function save() { if (location.hash === '#demo') return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { mem = true; } }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function uid() { return 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function itemsOf(c) { return c.items.concat(S.custom.filter(function (x) { return x.cat === c.id; }).map(function (x) { return [x.id, x.text, 'MINE', '']; })); }
+
+// self-check: ids must be unique, or progress would be mixed up
+(function () { var seen = {}; CATS.forEach(function (c) { c.items.forEach(function (i) { console.assert(!seen[i[0]], 'duplicate id ' + i[0]); seen[i[0]] = 1; }); }); })();
+
+if (location.hash === '#demo') { // only for screenshots: sample progress, never saved
+  ['n1', 'n2', 'n4', 'n6', 'n7', 'h1', 'h2', 'h3', 'a2', 'a8', 'p1', 'p2', 'c1', 'c3', 'w1', 'w4'].forEach(function (i) { S.done[i] = 1; });
+  S.custom = [{ id: 'd1', cat: 'cars', text: 'My first boring sedan' }]; S.notes = { d1: 'Found near the port. No tracker.' };
+  S.goals = [{ id: 'g1', name: 'First garage', target: 50000, have: 12500 }]; S.open = { night: 1, cars: 1, money: 1 };
+}
+
+var main = document.getElementById('main'), q = document.getElementById('q'), f = document.getElementById('f');
+function render() {
+  var term = q.value.trim().toLowerCase(), flt = f.value, html = '', all = 0, got = 0, shown = 0;
+  CATS.forEach(function (c) {
+    var its = itemsOf(c), d = its.filter(function (i) { return S.done[i[0]]; }).length, rows = '';
+    all += its.length; got += d;
+    its.forEach(function (i) {
+      var done = !!S.done[i[0]], note = S.notes[i[0]] || '';
+      if (term && (i[1] + ' ' + i[3] + ' ' + note).toLowerCase().indexOf(term) < 0) return;
+      if (flt === 'todo' && done || flt === 'done' && !done || (flt === 'UNCONFIRMED' || flt === 'MINE') && i[2] !== flt) return;
+      shown++;
+      rows += '<li class="it' + (done ? ' done' : '') + '"><input type="checkbox" id="x' + i[0] + '" data-id="' + i[0] + '"' + (done ? ' checked' : '') + '>' +
+        '<div><label for="x' + i[0] + '">' + esc(i[1]) + '</label><span class="tg ' + i[2] + '">' + (i[2] === 'TIP' ? 'OUR TIP' : i[2]) + '</span>' + (i[3] ? '<span class="src">' + esc(i[3]) + '</span>' : '') + '</div>' +
+        '<div><button class="ib" data-note="' + i[0] + '" aria-label="Note">&#9998;</button>' + (i[2] === 'MINE' ? '<button class="ib" data-del="' + i[0] + '" aria-label="Delete">&times;</button>' : '') + '</div>' +
+        '<input class="note" data-nid="' + i[0] + '" placeholder="Note" value="' + esc(note) + '"' + (note ? '' : ' hidden') + '></li>';
+    });
+    if ((term || flt !== 'all') && !rows) return;
+    var pct = its.length ? Math.round(d / its.length * 100) : 0;
+    html += '<details class="cat" data-cat="' + c.id + '"' + (S.open[c.id] || term || flt !== 'all' ? ' open' : '') + '><summary><span class="nm">' + c.name + '</span><span class="ct">' + d + ' / ' + its.length + '</span><div class="bar"><b style="width:' + pct + '%"></b></div></summary>' +
+      '<p class="about">' + c.about + '</p><ul>' + rows + '</ul>' +
+      '<form class="add" data-add="' + c.id + '"><input name="t" placeholder="Add your own" maxlength="140" aria-label="Add an item to ' + c.name + '"><button class="btn">Add</button></form></details>';
+  });
+  if (!term && flt === 'all') {
+    var g = '';
+    S.goals.forEach(function (x) {
+      var p = x.target > 0 ? Math.min(100, Math.round(x.have / x.target * 100)) : 0;
+      g += '<div class="goal"><div class="row"><b>' + esc(x.name) + '</b><span class="ct">' + p + '%</span><button class="ib" data-gdel="' + x.id + '" aria-label="Delete goal">&times;</button></div>' +
+        '<div class="bar"><b style="width:' + p + '%"></b></div><div class="row"><label>Have $ <input type="number" min="0" inputmode="numeric" data-ghave="' + x.id + '" value="' + x.have + '"></label><span style="color:var(--mute)">of $' + Number(x.target).toLocaleString('en-US') + '</span></div></div>';
+    });
+    html += '<details class="cat" data-cat="money"' + (S.open.money ? ' open' : '') + '><summary><span class="nm">Money goals</span><span class="ct">' + S.goals.length + '</span></summary>' +
+      '<p class="about">Your own targets. No price or payout was published before launch, and some story points are reported to need a sum of money (amount not stated), so type the numbers you see in your game. Pocket cash is reported lost if you are Wasted or Busted: bank it.</p>' + g +
+      '<form class="addgoal"><input name="n" placeholder="Goal (for example: first garage)" maxlength="60" aria-label="Goal name"><input name="t" type="number" min="1" inputmode="numeric" placeholder="Target $" aria-label="Target amount"><button class="btn">Add goal</button></form></details>';
+  } else if (!shown) html = '<p class="empty">Nothing matches.</p>';
+  main.innerHTML = html;
+  document.getElementById('tot').textContent = got + ' / ' + all;
+  document.getElementById('totbar').style.width = (all ? got / all * 100 : 0) + '%';
+}
+
+main.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t.dataset.id) { if (t.checked) S.done[t.dataset.id] = 1; else delete S.done[t.dataset.id]; save(); render(); }
+  else if (t.dataset.nid) { if (t.value.trim()) S.notes[t.dataset.nid] = t.value.trim(); else delete S.notes[t.dataset.nid]; save(); }
+  else if (t.dataset.ghave) { S.goals.forEach(function (x) { if (x.id === t.dataset.ghave) x.have = Math.max(0, Number(t.value) || 0); }); save(); render(); }
+});
+main.addEventListener('click', function (e) {
+  var t = e.target;
+  if (t.dataset.note) { var n = main.querySelector('[data-nid="' + t.dataset.note + '"]'); n.hidden = !n.hidden; if (!n.hidden) n.focus(); }
+  else if (t.dataset.del && confirm('Delete this item?')) { S.custom = S.custom.filter(function (x) { return x.id !== t.dataset.del; }); delete S.done[t.dataset.del]; delete S.notes[t.dataset.del]; save(); render(); }
+  else if (t.dataset.gdel && confirm('Delete this goal?')) { S.goals = S.goals.filter(function (x) { return x.id !== t.dataset.gdel; }); save(); render(); }
+});
+main.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var fm = e.target;
+  if (fm.dataset.add) { var v = fm.t.value.trim(); if (!v) return; S.custom.push({ id: uid(), cat: fm.dataset.add, text: v }); S.open[fm.dataset.add] = 1; }
+  else { var n = fm.n.value.trim(), tg = Number(fm.t.value); if (!n || !(tg > 0)) return; S.goals.push({ id: uid(), name: n, target: tg, have: 0 }); S.open.money = 1; }
+  save(); render();
+});
+main.addEventListener('toggle', function (e) { var c = e.target.dataset && e.target.dataset.cat; if (!c || q.value || f.value !== 'all') return; if (e.target.open) S.open[c] = 1; else delete S.open[c]; save(); }, true);
+q.addEventListener('input', render); f.addEventListener('change', render);
+
+document.getElementById('exp').onclick = function () {
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 1)], { type: 'application/json' }));
+  a.download = 'leonida-tracker-backup.json'; a.click();
+};
+document.getElementById('imp').onclick = function () { document.getElementById('file').click(); };
+document.getElementById('file').onchange = function (e) {
+  var fl = e.target.files[0]; if (!fl) return;
+  var r = new FileReader();
+  r.onload = function () {
+    try { var d = JSON.parse(r.result); if (typeof d.done !== 'object' || !Array.isArray(d.custom)) throw 0; } catch (x) { alert('That file is not a Leonida Tracker backup.'); return; }
+    if (!confirm('Replace the progress on this device with the backup?')) return;
+    S = Object.assign({ done: {}, notes: {}, custom: [], goals: [], open: {} }, d); save(); render();
+  };
+  r.readAsText(fl); e.target.value = '';
+};
+document.getElementById('rst').onclick = function () { if (confirm('Erase all progress, notes and added items on this device?')) { S = { done: {}, notes: {}, custom: [], goals: [], open: { night: 1 } }; save(); render(); } };
+
+render();
+if (mem) main.insertAdjacentHTML('afterbegin', '<p class="empty">This browser is blocking storage (private window?). Progress will be lost when you close the page.</p>');
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () {});
+</script>
+</body>
+</html>
